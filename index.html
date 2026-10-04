@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تونس السياحية | Tunisia Tourism</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        piPurple: '#4A0E4E',
+                        piGold: '#D4AF37',
+                        piDark: '#121212'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-piDark text-gray-100 font-sans min-h-screen flex flex-col">
+
+    <!-- شريط التنقل العلوي -->
+    <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-2xl font-bold text-piGold"><i class="fa-solid fa-landmark-dome ml-2"></i> Tunisia Tour</span>
+            </div>
+            
+            <!-- أدوات التحكم واللغة -->
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-800 text-gray-200 text-sm rounded-lg px-2 py-1 border border-gray-700 focus:outline-none">
+                    <option value="ar">العربية</option>
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                </select>
+                <div id="userProfile" class="hidden text-xs bg-purple-900/50 border border-piGold text-piGold px-3 py-1 rounded-full">
+                    <i class="fa-solid fa-user ml-1"></i> <span id="usernameDisplay">مستخدم Pi</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- التنقل الرئيسي (التويبس) -->
+    <nav class="bg-gray-900/80 backdrop-blur border-b border-gray-800">
+        <div class="container mx-auto px-4 flex overflow-x-auto space-x-6 space-x-reverse py-2 text-sm">
+            <button onclick="switchTab('hotels')" id="btn-hotels" class="tab-btn pb-1 border-b-2 border-piGold text-piGold font-semibold whitespace-nowrap"><i class="fa-solid fa-hotel ml-1"></i> الفنادق</button>
+            <button onclick="switchTab('attractions')" id="btn-attractions" class="tab-btn pb-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 whitespace-nowrap"><i class="fa-solid fa-mountain-sun ml-1"></i> المعالم</button>
+            <button onclick="switchTab('transport')" id="btn-transport" class="tab-btn pb-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 whitespace-nowrap"><i class="fa-solid fa-train ml-1"></i> المواصلات</button>
+            <button onclick="switchTab('weather')" id="btn-weather" class="tab-btn pb-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 whitespace-nowrap"><i class="fa-solid fa-cloud-sun ml-1"></i> الطقس والطوارئ</button>
+            <button onclick="switchTab('mybookings')" id="btn-mybookings" class="tab-btn pb-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 whitespace-nowrap"><i class="fa-solid fa-ticket ml-1"></i> حجوزاتي</button>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        
+        <!-- قسم الفنادق -->
+        <section id="tab-hotels" class="tab-content">
+            <h2 class="text-xl font-bold mb-4 text-piGold">الفنادق المتاحة للحجز بعملة Pi</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- فندق 1 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80" alt="Hotel" class="w-48 h-48 w-full object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">فندق قصر سوسة</h3>
+                        <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-piGold ml-1"></i> سوسة، تونس</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-piGold font-bold text-lg">15 π <span class="text-xs text-gray-400">/ ليلة</span></span>
+                            <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">⭐ 4.8</span>
+                        </div>
+                        <button onclick="openBookingModal('فندق قصر سوسة', 15)" class="w-احجز bg-gradient-to-r from-purple-700 to-piGold text-white font-semibold py-2 rounded-lg hover:opacity-90 transition">احجز الان</button>
+                    </div>
+                </div>
+                <!-- فندق 2 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80" alt="Hotel" class="w-48 h-48 w-full object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">منتجع الحمامات الدولي</h3>
+                        <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-piGold ml-1"></i> الحمامات، تونس</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-piGold font-bold text-lg">22 π <span class="text-xs text-gray-400">/ ليلة</span></span>
+                            <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">⭐ 4.9</span>
+                        </div>
+                        <button onclick="openBookingModal('منتجع الحمامات الدولي', 22)" class="w-full bg-gradient-to-r from-purple-700 to-piGold text-white font-semibold py-2 rounded-lg hover:opacity-90 transition">احجز الان</button>
+                    </div>
+                </div>
+                <!-- فندق 3 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80" alt="Hotel" class="w-48 h-48 w-full object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">نزل سيدي بو سعيد</h3>
+                        <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-piGold ml-1"></i> تونس العاصمة</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-piGold font-bold text-lg">18 π <span class="text-xs text-gray-400">/ ليلة</span></span>
+                            <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">⭐ 4.7</span>
+                        </div>
+                        <button onclick="openBookingModal('نزل سيدي بو سعيد', 18)" class="w-full bg-gradient-to-r from-purple-700 to-piGold text-white font-semibold py-2 rounded-lg hover:opacity-90 transition">احجز الان</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم المعالم -->
+        <section id="tab-attractions" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4 text-piGold">أبرز المعالم السياحية في تونس</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex space-x-4 space-x-reverse">
+                    <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=300&q=80" class="w-28 h-28 rounded-lg object-cover">
+                    <div>
+                        <h3 class="font-bold text-lg">مدرج الجم الأثري</h3>
+                        <p class="text-gray-400 text-sm mt-1">ثالث أكبر مدرج روماني في العالم، معلم تاريخي فريد يقع في ولاية المهدية/سوسة.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex space-x-4 space-x-reverse">
+                    <img src="https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=300&q=80" class="w-28 h-28 rounded-lg object-cover">
+                    <div>
+                        <h3 class="font-bold text-lg">قرية سيدي بو سعيد</h3>
+                        <p class="text-gray-400 text-sm mt-1">القرية الساحلية الشهيرة بمبانيها البيضاء والزرقاء المطلة على خليج تونس.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم المواصلات -->
+        <section id="tab-transport" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4 text-piGold">دليل المواصلات والنقل</h2>
+            <div class="space-y-3">
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold"><i class="fa-solid fa-train text-piGold ml-2"></i> السكك الحديدية (SNCFT)</h4>
+                        <p class="text-gray-400 text-sm">ربط بين تونس العاصمة والمدن الكبرى (سصفاقس، سوسة، توزر).</p>
+                    </div>
+                    <span class="bg-purple-900/40 text-piGold px-3 py-1 rounded text-sm">متاح</span>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold"><i class="fa-solid fa-plane text-piGold ml-2"></i> مطار تونس قرطاج الدولي</h4>
+                        <p class="text-gray-400 text-sm">البوابة الجوية الرئيسية للعاصمة.</p>
+                    </div>
+                    <span class="bg-purple-900/40 text-piGold px-3 py-1 rounded text-sm">نشط</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الطقس والطوارئ -->
+        <section id="tab-weather" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+                    <h3 class="font-bold text-lg mb-3 text-piGold"><i class="fa-solid fa-cloud-sun ml-2"></i> حالة الطقس في تونس</h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-3xl font-bold">24°C</p>
+                            <p class="text-gray-400 text-sm">مشمس إلى غائم جزئياً</p>
+                        </div>
+                        <i class="fa-solid fa-sun text-yellow-400 text-4xl"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+                    <h3 class="font-bold text-lg mb-3 text-red-400"><i class="fa-solid fa-phone-volume ml-2"></i> أرقام الطوارئ</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between"><span>الشرطة / النجدة:</span> <span class="font-bold text-piGold">197</span></li>
+                        <li class="flex justify-between"><span>الحماية المدنية (الإطفاء):</span> <span class="font-bold text-piGold">198</span></li>
+                        <li class="flex justify-between"><span>الإسعاف الطبي:</span> <span class="font-bold text-piGold">190</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الحجوزات الخاصة بالمستخدم -->
+        <section id="tab-mybookings" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4 text-piGold">سجل الحجوزات المدفوعة</h2>
+            <div id="bookingsList" class="space-y-3">
+                <p class="text-gray-400 text-sm">لا توجد حجوزات نشطة حالياً. ابدأ بحجز فندقك المفضل عبر عملة Pi!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- نافذة الحجز الدفع المنبثقة (Modal) -->
+    <div id="bookingModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md p-6 relative">
+            <h3 id="modalHotelTitle" class="text-lg font-bold text-piGold mb-2">تأكيد الحجز</h3>
+            <p class="text-gray-400 text-sm mb-4">أدخل عدد الليالي المطلوبة لحساب السعر الإجمالي بالعملة الرقمية Pi.</p>
+            
+            <div class="mb-4">
+                <label class="block text-xs text-gray-400 mb-1">عدد الليالي:</label>
+                <input type="number" id="nightsInput" value="1" min="1" oninput="calculateTotal()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none">
+            </div>
+
+            <div class="bg-gray-800/60 p-3 rounded-lg mb-4 flex justify-between items-center">
+                <span class="text-sm text-gray-300">الإجمالي المستحق:</span>
+                <span id="totalPriceDisplay" class="text-piGold font-bold text-xl">0 π</span>
+            </div>
+
+            <div class="flex space-x-3 space-x-reverse">
+                <button onclick="processPiPayment()" class="flex-1 bg-piGold text-gray-900 font-bold py-2 rounded-lg hover:bg-yellow-500 transition">ادفع بـ Pi</button>
+                <button onclick="closeBookingModal()" class="bg-gray-800 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700 transition">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- الفوتر -->
+    <footer class="bg-gray-900 border-t border-gray-800 text-center py-4 text-xs text-gray-500">
+        جميع الحقوق محفوظة &copy; 2026 - تونس السياحية على شبكة Pi Network
+    </footer>
+
+    <!-- سكريبت التشغيل والربط مع Pi SDK -->
+    <script>
+        let currentHotel = '';
+        let pricePerNight = 0;
+        let userBookings = [];
+
+        // تهيئة Pi SDK
+        Pi.init({ version: "2.0", sandbox: true });
+
+        // المصادقة التلقائية عند التحميل
+        document.addEventListener("DOMContentLoaded", () => {
+            const scopes = ['username', 'payments'];
+            function onIncompletePaymentFound(payment) {
+                console.log("تم العثور على دفعة غير مكتملة:", payment);
+            }
+            
+            Pi.authenticate(scopes, onIncompletePaymentFound).then(auth => {
+                if (auth && auth.user) {
+                    document.getElementById('userProfile').classList.remove('hidden');
+                    document.getElementById('usernameDisplay').innerText = auth.user.username;
+                }
+            }).catch(err => {
+                console.error("خطأ في مصادقة Pi:", err);
+            });
+        });
+
+        // التنقل بين الأقسام (Tabs)
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-piGold', 'text-piGold', 'font-semibold');
+                btn.classList.add('border-transparent', 'text-gray-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('border-transparent', 'text-gray-400');
+            activeBtn.classList.add('border-piGold', 'text-piGold', 'font-semibold');
+        }
+
+        // التحكم بنافذة الحجز
+        function openBookingModal(hotelName, price) {
+            currentHotel = hotelName;
+            pricePerNight = price;
+            document.getElementById('modalHotelTitle').innerText = `حجز: ${hotelName}`;
+            document.getElementById('nightsInput').value = 1;
+            calculateTotal();
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function calculateTotal() {
+            const nights = document.getElementById('nightsInput').value || 1;
+            const total = nights * pricePerNight;
+            document.getElementById('totalPriceDisplay').innerText = `${total} π`;
+        }
+
+        // معالجة الدفع الفعلي عبر Pi Network SDK
+        function processPiPayment() {
+            const nights = document.getElementById('nightsInput').value || 1;
+            const totalAmount = nights * pricePerNight;
+
+            const paymentData = {
+                amount: totalAmount,
+                memo: `حجز في ${currentHotel} لمدة ${nights} ليلة`,
+                metadata: { hotel: currentHotel, nights: nights }
+            };
+
+            const callbacks = {
+                onReadyForServerApproval: function(paymentId) {
+                    console.log("جاهز للموافقة على السيرفر:", paymentId);
+                },
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    console.log("اكتملت الدفعة بنجاح:", txid);
+                    alert("تم الدفع بنجاح وتأكيد حجزك!");
+                    
+                    // إضافة الحجز إلى القائمة المحلية
+                    userBookings.push({
+                        hotel: currentHotel,
+                        nights: nights,
+                        total: totalAmount,
+                        date: new Date().toLocaleDateString()
+                    });
+                    renderBookings();
+                    closeBookingModal();
+                    switchTab('mybookings');
+                },
+                onCancel: function(paymentId) {
+                    alert("تم إلغاء عملية الدفع.");
+                },
+                onError: function(error, payment) {
+                    alert("حدث خطأ أثناء الدفع: " + error);
+                }
+            };
+
+            Pi.createPayment(paymentData, callbacks);
+        }
+
+        // تحديث عرض قائمة الحجوزات
+        function renderBookings() {
+            const container = document.getElementById('bookingsList');
+            if (userBookings.length === 0) {
+                container.innerHTML = `<p class="text-gray-400 text-sm">لا توجد حجوزات نشطة حالياً. ابدأ بحجز فندقك المفضل عبر عملة Pi!</p>`;
+                return;
+            }
+
+            container.innerHTML = userBookings.map(b => `
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-piGold">${b.hotel}</h4>
+                        <p class="text-gray-400 text-sm">عدد الليالي: ${b.nights} | تاريخ الحجز: ${b.date}</p>
+                    </div>
+                    <span class="bg-purple-900/50 text-piGold px-3 py-1 rounded font-bold">${b.total} π</span>
+                </div>
+            `).join('');
+        }
+
+        // ميزة تغيير اللغات البسيطة
+        function changeLanguage(lang) {
+            const root = document.getElementById('htmlRoot');
+            if (lang === 'ar') {
+                root.setAttribute('dir', 'rtl');
+                root.setAttribute('lang', 'ar');
+            } else {
+                root.setAttribute('dir', 'ltr');
+                root.setAttribute('lang', lang);
+            }
+        }
+    </script>
+</body>
+</html>
